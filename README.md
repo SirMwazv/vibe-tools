@@ -355,4 +355,5 @@ If you encounter any issues:
 3. Ensure Docker Desktop is running
 4. Try cleaning and restarting: `./manage-docker.sh clean && ./manage-docker.sh start`
 
-**Happy coding! 🎉**
+**Cloud Architecture Diagram**
+![alt text](<vibe tools cloud architecture diagram.png>)
