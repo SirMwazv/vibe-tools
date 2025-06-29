@@ -13,7 +13,7 @@ public static class ServiceCollectionExtensions
     {
         // Database
         services.AddDbContext<VibeToolsContext>(options =>
-            options.UseInMemoryDatabase("VibeToolsDb"));
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         // Repositories
         services.AddScoped<IToolRepository, ToolRepository>();

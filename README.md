@@ -15,16 +15,17 @@ A full-stack application for discovering and reviewing AI tools, built with .NET
 
 ### Backend (.NET Core Web API)
 - ASP.NET Core 8.0
-- Entity Framework Core (In-Memory Database)
+- Entity Framework Core with SQL Server
 - Repository Pattern
 - Service Layer Architecture
 - Swagger/OpenAPI Documentation
+- Database Migrations
 
 ### Frontend (Next.js React)
 - Next.js 15.3.4 with App Router
 - React 19
 - TypeScript
-- Tailwind CSS
+- CSS Modules (Custom Styling)
 - Lucide React Icons
 
 ## 📁 Project Structure
@@ -57,6 +58,21 @@ vibe-tools/
 - .NET 8.0 SDK
 - Node.js 18+ 
 - npm or yarn
+- SQL Server (Docker recommended - see [SQL Server Setup Guide](SQL_SERVER_SETUP.md))
+
+### Database Setup
+
+1. **Option 1: Docker (Recommended)**
+   ```bash
+   # Start SQL Server container
+   docker compose up -d
+   ```
+
+2. **Option 2: Local SQL Server**
+   - Install SQL Server locally
+   - Update connection string in `appsettings.Development.json`
+
+3. **See detailed setup instructions:** [SQL_SERVER_SETUP.md](SQL_SERVER_SETUP.md)
 
 ### Backend (.NET API)
 
@@ -71,7 +87,12 @@ vibe-tools/
    dotnet run
    ```
 
-3. API will be available at:
+3. The application will automatically:
+   - Apply database migrations
+   - Create tables
+   - Seed sample data
+
+4. API will be available at:
    - HTTPS: `https://localhost:5001`
    - HTTP: `http://localhost:5000`
    - Swagger UI: `https://localhost:5001/swagger`
@@ -127,21 +148,41 @@ The API is configured to allow requests from `http://localhost:3000` and `https:
 
 ## 🧪 Development Notes
 
-- The frontend currently uses mock data by default
-- To connect to the real API, ensure both backend and frontend are running
-- The API uses an in-memory database, so data resets on restart
+- The frontend uses CSS Modules for styling (Tailwind CSS removed)
+- To connect frontend to the real API, ensure both backend and frontend are running
+- The API uses SQL Server database with Entity Framework migrations
+- Database is automatically created and seeded on first run
 - All reviews include fun Power Rangers character names and themed comments
+
+## 🗄️ Database
+
+- **Database**: SQL Server (Docker recommended)
+- **ORM**: Entity Framework Core 9.0
+- **Migrations**: Automatic on startup
+- **Seeding**: 30 tools + 28 Power Rangers reviews
+
+### Database Commands
+```bash
+# Create migration
+dotnet ef migrations add MigrationName
+
+# Apply migrations manually
+dotnet ef database update
+
+# Remove last migration
+dotnet ef migrations remove
+```
 
 ## 🚀 Future Enhancements
 
 - [ ] User authentication and authorization
-- [ ] Persistent database (SQL Server/PostgreSQL)
+- [ ] Azure deployment with Azure SQL Database
 - [ ] Image uploads for tools
 - [ ] Advanced filtering and sorting
 - [ ] User profiles and review history
 - [ ] Email notifications for new reviews
 - [ ] API rate limiting
-- [ ] Deployment to Azure/Vercel
+- [ ] Real-time updates with SignalR
 
 ## 📝 License
 

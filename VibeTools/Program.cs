@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using VibeTools.Data;
 using VibeTools.Extensions;
 
@@ -22,10 +23,15 @@ app.UseCors("AllowFrontend");
 app.UseAuthorization();
 app.MapControllers();
 
-// Seed data
+// Ensure database is created and migrated
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<VibeToolsContext>();
+    
+    // Apply pending migrations
+    context.Database.Migrate();
+    
+    // Seed data
     DbSeeder.SeedData(context);
 }
 
