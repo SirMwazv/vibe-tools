@@ -85,6 +85,19 @@ export default function VibeToolsApp() {
     return grouped;
   };
 
+  if (showAddForm) {
+    return (
+      <div className={styles.page}>
+        <div className={styles.container}>
+          <AddToolForm
+            onSubmit={handleAddTool}
+            onCancel={() => setShowAddForm(false)}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.page}>
       {/* Header */}
