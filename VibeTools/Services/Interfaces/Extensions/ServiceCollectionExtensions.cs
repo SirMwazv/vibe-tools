@@ -31,6 +31,14 @@ public static class ServiceCollectionExtensions
                       .AllowAnyMethod()
                       .AllowAnyHeader();
             });
+            
+            options.AddPolicy("AllowFrontend", policy =>
+            {
+                policy.WithOrigins("http://localhost:3000", "https://localhost:3000")
+                      .AllowAnyMethod()
+                      .AllowAnyHeader()
+                      .AllowCredentials();
+            });
         });
 
         return services;
