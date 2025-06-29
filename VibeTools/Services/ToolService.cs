@@ -147,24 +147,8 @@ public class ToolService : IToolService
 
     private static double CalculateRankingScore(double averageRating, int reviewCount)
     {
-        // Bayesian average with confidence factor
-        // The more reviews, the more the score approaches the actual average
-        // Tools with fewer reviews get penalized slightly
-        
-        const double globalAverageRating = 3.0; // Assume global average of 3.0
-        const double minimumReviewsForFullWeight = 10.0; // Reviews needed for full weight
-        
-        // Calculate confidence factor (0 to 1)
-        var confidence = Math.Min(reviewCount / minimumReviewsForFullWeight, 1.0);
-        
-        // Bayesian weighted rating
-        var bayesianRating = (confidence * averageRating) + ((1 - confidence) * globalAverageRating);
-        
-        // Add bonus for having more reviews (logarithmic scale to prevent runaway)
-        var reviewBonus = Math.Log10(Math.Max(reviewCount, 1)) * 0.1;
-        
-        // Final score: Bayesian rating + review bonus
-        return Math.Round(bayesianRating + reviewBonus, 2);
+        // Ranking is now simply the average rating
+        return averageRating;
     }
 
     private static void UpdateToolStatus(Tool tool)

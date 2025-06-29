@@ -64,6 +64,24 @@ export default function VibeToolsApp() {
     // Search is handled by useEffect when searchQuery changes
   };
 
+  // Group tools by category and get top 3 by average rating
+  const getTopToolsByCategory = () => {
+    const grouped: { [category: string]: Tool[] } = {};
+    tools.forEach(tool => {
+      if (!grouped[tool.category]) grouped[tool.category] = [];
+      grouped[tool.category].push(tool);
+    });
+    // Sort each group by average rating and take top 3
+    Object.keys(grouped).forEach(cat => {
+      grouped[cat] = grouped[cat]
+        .sort((a, b) => b.averageRating - a.averageRating)
+        .slice(0, 3);
+    });
+    return grouped;
+  };
+
+  const [showAll, setShowAll] = useState(false);
+
   if (selectedTool) {
     return (
       <div className={styles.page}>
@@ -146,20 +164,44 @@ export default function VibeToolsApp() {
           <>
             <div className={styles.resultsHeader}>
               <h2 className={styles.resultsTitle}>
-                {searchQuery ? `Search results for "${searchQuery}"` : 'Featured Tools'}
+                {searchQuery ? `Search results for "${searchQuery}"` : showAll ? 'All Tools' : 'Suggested Tools'}
                 <span className={styles.resultsCount}>({tools.length} tools)</span>
               </h2>
+              {!searchQuery && (
+                <button onClick={() => setShowAll(v => !v)} className={styles.viewAllButton}>
+                  {showAll ? 'Show Suggested Tools' : 'View All Tools'}
+                </button>
+              )}
             </div>
 
-            <div className={styles.toolsGrid}>
-              {tools.map((tool) => (
-                <ToolCard
-                  key={tool.id}
-                  tool={tool}
-                  onClick={() => handleToolClick(tool.id)}
-                />
-              ))}
-            </div>
+            {showAll || searchQuery ? (
+              <div className={styles.toolsGrid}>
+                {tools.map((tool) => (
+                  <ToolCard
+                    key={tool.id}
+                    tool={tool}
+                    onClick={() => handleToolClick(tool.id)}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div>
+                {Object.entries(getTopToolsByCategory()).map(([category, topTools]) => (
+                  <div key={category} className={styles.categorySection}>
+                    <h3 className={styles.categoryTitle}>{category}</h3>
+                    <div className={styles.toolsGrid}>
+                      {topTools.map(tool => (
+                        <ToolCard
+                          key={tool.id}
+                          tool={tool}
+                          onClick={() => handleToolClick(tool.id)}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </>
         )}
       </main>
