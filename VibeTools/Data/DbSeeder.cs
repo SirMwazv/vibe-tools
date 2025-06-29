@@ -63,7 +63,7 @@ public static class DbSeeder
             new Review { ToolId = 1, Rating = 5, Comment = "Yellow Ranger here! Claude's reasoning abilities are absolutely amazing!", ReviewerName = "Trini Kwan" },
             new Review { ToolId = 1, Rating = 5, Comment = "Black Ranger reporting! This AI is the ultimate sidekick for any task!", ReviewerName = "Zack Taylor" },
 
-            // Character.AI reviews (ordered to hide from featured tools - latest 3 reviews average < 3.0)
+            // Character.AI reviews (ordered to hide from featured tools - latest 5 reviews average < 5.0)
             new Review { ToolId = 5, Rating = 2, Comment = "Time Force Blue Ranger here - characters are inconsistent and repetitive.", ReviewerName = "Lucas Kendall" },
             new Review { ToolId = 5, Rating = 2, Comment = "Time Force Green Ranger says the AI personalities feel shallow.", ReviewerName = "Trip" },
             new Review { ToolId = 5, Rating = 1, Comment = "Wild Force Red Ranger disappointed - conversations break down quickly.", ReviewerName = "Cole Evans" },

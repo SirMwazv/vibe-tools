@@ -220,9 +220,10 @@ Frontend available at: `http://localhost:3000`
 ## 🌱 Sample Data
 
 The application comes pre-seeded with:
-- **30 AI Tools** across 5 categories
+- **31 AI Tools** across 5 categories
 - **28 Reviews** from Power Rangers characters
 - **Community Favorites** with golden borders and special badges
+- **Community Dislike** Character.AI seeded with 5 1 star reviews to ensure that it is not suggested at all
 - Categories: AI Assistant, IDE Extension, IDE, Creative, Productivity
 
 ## �️ Database
@@ -230,7 +231,7 @@ The application comes pre-seeded with:
 - **Database**: SQL Server 2022 (Docker)
 - **ORM**: Entity Framework Core 9.0
 - **Migrations**: Automatic on startup
-- **Seeding**: 30 tools + 28 Power Rangers reviews
+- **Seeding**: tools + Power Rangers reviews
 - **Persistence**: Data persists in Docker volumes
 
 ### Database Access
