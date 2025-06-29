@@ -61,12 +61,11 @@
 
 .searchIcon {
   position: absolute;
-  left: 0.75rem;
+  left: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--secondary);
-  width: 1.25rem;
-  height: 1.25rem;
+  pointer-events: none;
+  color: #a3a3a3;
 }
 
 .searchInput {
@@ -77,6 +76,7 @@
   background-color: var(--card-bg);
   color: var(--foreground);
   font-size: 1rem;
+  padding-left: 2.5rem;
 }
 
 .searchInput:focus {
