@@ -195,7 +195,7 @@ dotnet restore
 dotnet run
 ```
 
-API available at: `https://localhost:5001` or `http://localhost:5000`
+API available at: `https://localhost:5140` or `http://localhost:5140`
 
 ### Frontend (Next.js)
 
