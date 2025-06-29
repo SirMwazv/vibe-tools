@@ -1,6 +1,5 @@
-version: '3.8'
-
 services:
+  # SQL Server Database
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: vibetools-sqlserver
@@ -13,6 +12,53 @@ services:
     volumes:
       - sqlserver_data:/var/opt/mssql
     restart: unless-stopped
+    networks:
+      - vibetools-network
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P YourPassword123! -Q 'SELECT 1' -C"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # .NET API Backend
+  api:
+    build:
+      context: ./VibeTools
+      dockerfile: Dockerfile
+    container_name: vibetools-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=VibeToolsDb;User Id=sa;Password=YourPassword123!;TrustServerCertificate=true;
+    ports:
+      - "5140:80"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - vibetools-network
+
+  # Next.js Frontend
+  frontend:
+    build:
+      context: ./frontend/vibe-tools
+      dockerfile: Dockerfile
+      target: development
+    container_name: vibetools-frontend
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:5140/api
+      - NEXT_PUBLIC_DATA_SOURCE=api
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    restart: unless-stopped
+    networks:
+      - vibetools-network
+
+networks:
+  vibetools-network:
+    driver: bridge
 
 volumes:
   sqlserver_data:

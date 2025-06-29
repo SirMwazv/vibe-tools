@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Plus, ExternalLink, Heart } from 'lucide-react';
+import { Plus, ExternalLink } from 'lucide-react';
 import { Tool, CreateReviewDto } from '@/types';
 import StarRating from './StarRating';
-import { mockApi } from '@/services/api';
+import { ApiService } from '@/services/api';
 import styles from './ToolDetails.module.css';
 
 interface ToolDetailsProps {
@@ -30,7 +30,7 @@ const ToolDetails: React.FC<ToolDetailsProps> = ({
     
     setIsSubmitting(true);
     try {
-      await mockApi.createReview(tool.id, reviewForm);
+      await ApiService.createReview(tool.id, reviewForm);
       setShowReviewForm(false);
       setReviewForm({ rating: 5, comment: '', reviewerName: '' });
       onReviewAdded();
@@ -52,16 +52,16 @@ const ToolDetails: React.FC<ToolDetailsProps> = ({
 
       <div className={styles.card}>
         <div className={styles.header}>
-          <div className={styles.titleSection}>
-            <div className={styles.titleRow}>
+          <div>
+            <div className={`${styles.titleContainer} ${tool.isCommunityFavorite ? styles.communityFavorite : ''}`}>
               <h1 className={styles.title}>{tool.name}</h1>
               {tool.isCommunityFavorite && (
-                <div title="Community Favorite">
-                  <Heart className={styles.favoriteIcon} />
+                <div className={styles.communityBadge}>
+                  ⭐ Community Favourite
                 </div>
               )}
             </div>
-            <span className={styles.categoryBadge}>
+            <span className={styles.category}>
               {tool.category}
             </span>
           </div>
@@ -71,7 +71,7 @@ const ToolDetails: React.FC<ToolDetailsProps> = ({
             rel="noopener noreferrer"
             className={styles.visitButton}
           >
-            <ExternalLink style={{ width: '1rem', height: '1rem' }} />
+            <ExternalLink className={styles.buttonIcon} />
             <span>Visit Tool</span>
           </a>
         </div>

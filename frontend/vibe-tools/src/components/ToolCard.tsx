@@ -1,5 +1,5 @@
 import React from 'react';
-import { ExternalLink, Heart } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import { Tool } from '@/types';
 import StarRating from './StarRating';
 import styles from './ToolCard.module.css';
@@ -10,15 +10,19 @@ interface ToolCardProps {
 }
 
 const ToolCard: React.FC<ToolCardProps> = ({ tool, onClick }) => (
-  <div className={styles.card} onClick={onClick}>
+  <div 
+    className={`${styles.card} ${tool.isCommunityFavorite ? styles.communityFavorite : ''}`}
+    onClick={onClick}
+  >
+    {tool.isCommunityFavorite && (
+      <div className={styles.communityBadge}>
+        ⭐ Community Favourite
+      </div>
+    )}
+    
     <div className={styles.header}>
-      <div className={styles.titleContainer}>
+      <div className={styles.titleSection}>
         <h3 className={styles.title}>{tool.name}</h3>
-        {tool.isCommunityFavorite && (
-          <div title="Community Favorite">
-            <Heart className={styles.favoriteIcon} />
-          </div>
-        )}
       </div>
       <span className={styles.category}>
         {tool.category}
@@ -34,7 +38,7 @@ const ToolCard: React.FC<ToolCardProps> = ({ tool, onClick }) => (
           {tool.averageRating.toFixed(1)} ({tool.reviewCount} reviews)
         </span>
       </div>
-      <ExternalLink className={styles.externalIcon} />
+      <ExternalLink className={styles.icon} />
     </div>
   </div>
 );

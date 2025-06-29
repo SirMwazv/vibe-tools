@@ -1,0 +1,36 @@
+# Docker Compose override for development
+# This file extends docker-compose.yml for local development
+
+services:
+  # Development overrides for API
+  api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    volumes:
+      # Mount source code for hot reload in development
+      - ./VibeTools:/app/source:ro
+    # Uncomment for debugging
+    # ports:
+    #   - "5000:80"
+    #   - "5001:443"
+
+  # Development overrides for frontend
+  frontend:
+    environment:
+      - NODE_ENV=development
+    volumes:
+      # Mount source code for hot reload in development
+      - ./frontend/vibe-tools/src:/app/src:ro
+      - ./frontend/vibe-tools/public:/app/public:ro
+    # Enable hot reload
+    command: npm run dev
+
+  # Development overrides for SQL Server
+  sqlserver:
+    # Add more verbose logging for development
+    environment:
+      - MSSQL_AGENT_ENABLED=true
+    # Uncomment to persist data between container restarts
+    # volumes:
+    #   - ./data/sqlserver:/var/opt/mssql

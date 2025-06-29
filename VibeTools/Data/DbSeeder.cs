@@ -58,8 +58,10 @@ public static class DbSeeder
         {
             // Claude reviews
             new Review { ToolId = 1, Rating = 5, Comment = "It's morphin' time! This AI assistant is as powerful as the Red Ranger!", ReviewerName = "Jason Lee Scott" },
-            new Review { ToolId = 1, Rating = 4, Comment = "Blue Ranger approves! Great for analytical tasks and problem-solving.", ReviewerName = "Billy Cranston" },
+            new Review { ToolId = 1, Rating = 5, Comment = "Blue Ranger approves! Great for analytical tasks and problem-solving.", ReviewerName = "Billy Cranston" },
             new Review { ToolId = 1, Rating = 5, Comment = "Pink Power! Claude helps me with creative writing beautifully.", ReviewerName = "Kimberly Hart" },
+            new Review { ToolId = 1, Rating = 5, Comment = "Yellow Ranger here! Claude's reasoning abilities are absolutely amazing!", ReviewerName = "Trini Kwan" },
+            new Review { ToolId = 1, Rating = 5, Comment = "Black Ranger reporting! This AI is the ultimate sidekick for any task!", ReviewerName = "Zack Taylor" },
 
             // ChatGPT reviews
             new Review { ToolId = 2, Rating = 5, Comment = "Black Ranger here - this tool packs a serious punch for conversations!", ReviewerName = "Zack Taylor" },

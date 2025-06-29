@@ -279,3 +279,27 @@
   line-height: 1.5;
   margin: 0;
 }
+
+.titleContainer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+
+.communityFavorite .title {
+  color: #b45309;
+}
+
+.communityBadge {
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  color: #8b5a00;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 16px;
+  box-shadow: 0 2px 4px rgba(255, 215, 0, 0.3);
+  border: 1px solid #e6c200;
+  white-space: nowrap;
+}

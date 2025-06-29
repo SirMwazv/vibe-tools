@@ -34,7 +34,8 @@ public static class ServiceCollectionExtensions
             
             options.AddPolicy("AllowFrontend", policy =>
             {
-                policy.WithOrigins("http://localhost:3000", "https://localhost:3000")
+                policy.WithOrigins("http://localhost:3000", "https://localhost:3000", 
+                                  "http://localhost:3001", "https://localhost:3001")
                       .AllowAnyMethod()
                       .AllowAnyHeader()
                       .AllowCredentials();

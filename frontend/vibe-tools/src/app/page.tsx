@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Search, Plus } from 'lucide-react';
 import { Tool, CreateToolDto } from '@/types';
-import { mockApi } from '@/services/api';
+import { ApiService } from '@/services/api';
 import ToolCard from '@/components/ToolCard';
 import ToolDetails from '@/components/ToolDetails';
 import AddToolForm from '@/components/AddToolForm';
@@ -16,25 +16,25 @@ export default function VibeToolsApp() {
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadTools();
-  }, [searchQuery]);
-
-  const loadTools = async () => {
+  const loadTools = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await mockApi.getTools(searchQuery);
+      const data = await ApiService.getTools(searchQuery);
       setTools(data);
     } catch (error) {
       console.error('Failed to load tools:', error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [searchQuery]);
+
+  useEffect(() => {
+    loadTools();
+  }, [loadTools]);
 
   const handleToolClick = async (toolId: number) => {
     try {
-      const tool = await mockApi.getTool(toolId);
+      const tool = await ApiService.getTool(toolId);
       setSelectedTool(tool);
     } catch (error) {
       console.error('Failed to load tool details:', error);
@@ -43,7 +43,7 @@ export default function VibeToolsApp() {
 
   const handleAddTool = async (newTool: CreateToolDto) => {
     try {
-      const createdTool = await mockApi.createTool(newTool);
+      const createdTool = await ApiService.createTool(newTool);
       setTools(prev => [createdTool, ...prev]);
       setShowAddForm(false);
     } catch (error) {
@@ -53,7 +53,7 @@ export default function VibeToolsApp() {
 
   const handleReviewAdded = async () => {
     if (selectedTool) {
-      const updatedTool = await mockApi.getTool(selectedTool.id);
+      const updatedTool = await ApiService.getTool(selectedTool.id);
       setSelectedTool(updatedTool);
       loadTools(); // Refresh the list to update rankings
     }
@@ -168,7 +168,7 @@ export default function VibeToolsApp() {
       <footer className={styles.footer}>
         <div className={styles.footerContainer}>
           <p>VibeTools - Discover the best AI tools for your workflow</p>
-          <p className="small">Built with React + .NET Core</p>
+          <p className="small">Built with React + .NET Core by Mwazvita Mutowo</p>
         </div>
       </footer>
     </div>
