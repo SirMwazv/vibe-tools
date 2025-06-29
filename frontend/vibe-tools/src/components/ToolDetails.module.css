@@ -5,15 +5,24 @@
 
 .backButton {
   margin-bottom: 1.5rem;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  color: var(--color-primary);
-  text-decoration: none;
-  transition: color 0.2s ease;
+  gap: 0.5rem;
+  color: #fff;
+  background: linear-gradient(90deg, #6366f1 0%, #818cf8 100%);
+  border: none;
+  border-radius: 9999px;
+  padding: 0.5rem 1.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.08);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
 }
 
 .backButton:hover {
-  color: var(--color-primary-dark);
+  background: linear-gradient(90deg, #4f46e5 0%, #6366f1 100%);
+  color: #e0e7ff;
 }
 
 .card {
@@ -63,6 +72,18 @@
   font-size: 0.875rem;
   border-radius: 9999px;
   width: fit-content;
+}
+
+.category {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #4f46e5; /* Indigo-600, or use your brand color */
+  background: #eef2ff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  letter-spacing: 0.03em;
 }
 
 .visitButton {

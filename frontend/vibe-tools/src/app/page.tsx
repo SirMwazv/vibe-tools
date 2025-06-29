@@ -5,16 +5,20 @@ import { Search, Plus } from 'lucide-react';
 import { Tool, CreateToolDto } from '@/types';
 import { ApiService } from '@/services/api';
 import ToolCard from '@/components/ToolCard';
-import ToolDetails from '@/components/ToolDetails';
 import AddToolForm from '@/components/AddToolForm';
+import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
 
 export default function VibeToolsApp() {
   const [tools, setTools] = useState<Tool[]>([]);
-  const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
+  const [sort, setSort] = useState<'stars' | 'az' | 'za'>('stars');
+  const [minStars, setMinStars] = useState(0);
+  const [showAll, setShowAll] = useState(false);
+
+  const router = useRouter();
 
   const loadTools = useCallback(async () => {
     setLoading(true);
@@ -32,13 +36,8 @@ export default function VibeToolsApp() {
     loadTools();
   }, [loadTools]);
 
-  const handleToolClick = async (toolId: number) => {
-    try {
-      const tool = await ApiService.getTool(toolId);
-      setSelectedTool(tool);
-    } catch (error) {
-      console.error('Failed to load tool details:', error);
-    }
+  const handleToolClick = (toolId: number) => {
+    router.push(`/tool/${toolId}`);
   };
 
   const handleAddTool = async (newTool: CreateToolDto) => {
@@ -52,17 +51,23 @@ export default function VibeToolsApp() {
   };
 
   const handleReviewAdded = async () => {
-    if (selectedTool) {
-      const updatedTool = await ApiService.getTool(selectedTool.id);
-      setSelectedTool(updatedTool);
-      loadTools(); // Refresh the list to update rankings
-    }
+    loadTools(); // Refresh the list to update rankings
   };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     // Search is handled by useEffect when searchQuery changes
   };
+
+  // Filtering and sorting logic
+  const filteredTools = tools
+    .filter(tool => tool.averageRating >= minStars)
+    .sort((a, b) => {
+      if (sort === 'stars') return b.averageRating - a.averageRating;
+      if (sort === 'az') return a.name.localeCompare(b.name);
+      if (sort === 'za') return b.name.localeCompare(a.name);
+      return 0;
+    });
 
   // Group tools by category and get top 3 by average rating
   const getTopToolsByCategory = () => {
@@ -79,35 +84,6 @@ export default function VibeToolsApp() {
     });
     return grouped;
   };
-
-  const [showAll, setShowAll] = useState(false);
-
-  if (selectedTool) {
-    return (
-      <div className={styles.page}>
-        <div className={styles.container}>
-          <ToolDetails
-            tool={selectedTool}
-            onBack={() => setSelectedTool(null)}
-            onReviewAdded={handleReviewAdded}
-          />
-        </div>
-      </div>
-    );
-  }
-
-  if (showAddForm) {
-    return (
-      <div className={styles.page}>
-        <div className={styles.container}>
-          <AddToolForm
-            onSubmit={handleAddTool}
-            onCancel={() => setShowAddForm(false)}
-          />
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className={styles.page}>
@@ -139,6 +115,29 @@ export default function VibeToolsApp() {
               className={styles.searchInput}
             />
           </form>
+
+          {/* Filters */}
+          <div className={styles.filterBar}>
+            <label>
+              Min Stars:
+              <select value={minStars} onChange={e => setMinStars(Number(e.target.value))}>
+                <option value={0}>All</option>
+                <option value={1}>1+</option>
+                <option value={2}>2+</option>
+                <option value={3}>3+</option>
+                <option value={4}>4+</option>
+                <option value={5}>5</option>
+              </select>
+            </label>
+            <label>
+              Sort:
+              <select value={sort} onChange={e => setSort(e.target.value as any)}>
+                <option value="stars">Stars</option>
+                <option value="az">A-Z</option>
+                <option value="za">Z-A</option>
+              </select>
+            </label>
+          </div>
         </div>
       </header>
 
@@ -148,7 +147,7 @@ export default function VibeToolsApp() {
           <div className={styles.loading}>
             <div className={styles.spinner}></div>
           </div>
-        ) : tools.length === 0 ? (
+        ) : filteredTools.length === 0 ? (
           <div className={styles.emptyState}>
             <div className="message">
               {searchQuery ? 'No tools found matching your search.' : 'No tools available yet.'}
@@ -165,7 +164,7 @@ export default function VibeToolsApp() {
             <div className={styles.resultsHeader}>
               <h2 className={styles.resultsTitle}>
                 {searchQuery ? `Search results for "${searchQuery}"` : showAll ? 'All Tools' : 'Suggested Tools'}
-                <span className={styles.resultsCount}>({tools.length} tools)</span>
+                <span className={styles.resultsCount}>({filteredTools.length} tools)</span>
               </h2>
               {!searchQuery && (
                 <button onClick={() => setShowAll(v => !v)} className={styles.viewAllButton}>
@@ -176,7 +175,7 @@ export default function VibeToolsApp() {
 
             {showAll || searchQuery ? (
               <div className={styles.toolsGrid}>
-                {tools.map((tool) => (
+                {filteredTools.map((tool) => (
                   <ToolCard
                     key={tool.id}
                     tool={tool}
