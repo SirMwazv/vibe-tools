@@ -111,7 +111,7 @@ export default function VibeToolsApp() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search tools by name, description, or category..."
+              placeholder="  Search tools by name, description, or category..."
               className={styles.searchInput}
             />
           </form>
