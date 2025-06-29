@@ -10,6 +10,7 @@ public class ToolDto
     public bool IsCommunityFavorite { get; set; }
     public double AverageRating { get; set; }
     public int ReviewCount { get; set; }
+    public double RankingScore { get; set; }
     public DateTime CreatedAt { get; set; }
     public List<ReviewDto> Reviews { get; set; } = new();
 }

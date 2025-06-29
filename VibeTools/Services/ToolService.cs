@@ -26,10 +26,11 @@ public class ToolService : IToolService
             UpdateToolStatus(tool);
         }
         
-        // Filter visible tools and order by rating
+        // Filter visible tools and order by ranking score
         return tools.Where(t => t.IsVisible)
                    .Select(MapToDto)
-                   .OrderByDescending(t => t.AverageRating)
+                   .OrderByDescending(t => CalculateRankingScore(t.AverageRating, t.ReviewCount))
+                   .ThenByDescending(t => t.AverageRating)
                    .ThenByDescending(t => t.ReviewCount);
     }
 
@@ -113,6 +114,8 @@ public class ToolService : IToolService
 
     private static ToolDto MapToDto(Tool tool)
     {
+        var rankingScore = CalculateRankingScore(tool.AverageRating, tool.ReviewCount);
+        
         return new ToolDto
         {
             Id = tool.Id,
@@ -123,6 +126,7 @@ public class ToolService : IToolService
             IsCommunityFavorite = tool.IsCommunityFavorite,
             AverageRating = tool.AverageRating,
             ReviewCount = tool.ReviewCount,
+            RankingScore = rankingScore,
             CreatedAt = tool.CreatedAt,
             Reviews = tool.Reviews?.Select(MapReviewToDto).ToList() ?? new List<ReviewDto>()
         };
@@ -139,6 +143,28 @@ public class ToolService : IToolService
             ReviewerName = review.ReviewerName,
             CreatedAt = review.CreatedAt
         };
+    }
+
+    private static double CalculateRankingScore(double averageRating, int reviewCount)
+    {
+        // Bayesian average with confidence factor
+        // The more reviews, the more the score approaches the actual average
+        // Tools with fewer reviews get penalized slightly
+        
+        const double globalAverageRating = 3.0; // Assume global average of 3.0
+        const double minimumReviewsForFullWeight = 10.0; // Reviews needed for full weight
+        
+        // Calculate confidence factor (0 to 1)
+        var confidence = Math.Min(reviewCount / minimumReviewsForFullWeight, 1.0);
+        
+        // Bayesian weighted rating
+        var bayesianRating = (confidence * averageRating) + ((1 - confidence) * globalAverageRating);
+        
+        // Add bonus for having more reviews (logarithmic scale to prevent runaway)
+        var reviewBonus = Math.Log10(Math.Max(reviewCount, 1)) * 0.1;
+        
+        // Final score: Bayesian rating + review bonus
+        return Math.Round(bayesianRating + reviewBonus, 2);
     }
 
     private static void UpdateToolStatus(Tool tool)
