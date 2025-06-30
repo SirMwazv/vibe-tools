@@ -60,12 +60,7 @@
 }
 
 .searchIcon {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-  color: #a3a3a3;
+  visibility: hidden;
 }
 
 .searchInput {

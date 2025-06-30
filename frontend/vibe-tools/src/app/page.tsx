@@ -124,33 +124,10 @@ export default function VibeToolsApp() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="  Search tools by name, description, or category..."
+              placeholder="Search tools by name, description, or category..."
               className={styles.searchInput}
             />
           </form>
-
-          {/* Filters */}
-          <div className={styles.filterBar}>
-            <label>
-              Min Stars:
-              <select value={minStars} onChange={e => setMinStars(Number(e.target.value))}>
-                <option value={0}>All</option>
-                <option value={1}>1+</option>
-                <option value={2}>2+</option>
-                <option value={3}>3+</option>
-                <option value={4}>4+</option>
-                <option value={5}>5</option>
-              </select>
-            </label>
-            <label>
-              Sort:
-              <select value={sort} onChange={e => setSort(e.target.value as any)}>
-                <option value="stars">Stars</option>
-                <option value="az">A-Z</option>
-                <option value="za">Z-A</option>
-              </select>
-            </label>
-          </div>
         </div>
       </header>
 
