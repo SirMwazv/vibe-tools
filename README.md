@@ -72,7 +72,7 @@ vibe-tools/
 
 1. **Clone and start everything:**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/SirMwazv/vibe-tools.git
    cd vibe-tools
    ./manage-docker.sh start
    ```
@@ -213,7 +213,6 @@ Frontend available at: `http://localhost:3000`
 - `GET /api/tools/{id}` - Get tool by ID
 - `POST /api/tools` - Create new tool
 - `PUT /api/tools/{id}` - Update tool
-- `DELETE /api/tools/{id}` - Delete tool
 - `GET /api/tools/{id}/reviews` - Get reviews for a tool
 - `POST /api/tools/{id}/reviews` - Add review to a tool
 
